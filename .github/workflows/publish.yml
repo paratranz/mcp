@@ -52,5 +52,15 @@ jobs:
             exit 1
           fi
 
+      - name: Check published version
+        id: published
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if npm view "@paratranz/mcp@$version" version --registry=https://registry.npmjs.org >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::@paratranz/mcp@$version is already published, skipping"
+          fi
+
       - name: Publish to npm
+        if: steps.published.outputs.exists != 'true'
         run: npm publish --provenance --access public
