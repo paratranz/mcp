@@ -100,11 +100,20 @@ yarn test
 
 写操作按项目角色校验：文件/翻译导入/任务/标签写需管理员，词条写入需翻译者以上，术语创建需成员。删除类操作与站内专用接口（加入口令、测试题库）不会暴露。
 
+## 发布
+
+发布由 tag 触发（`.github/workflows/publish.yml`）：
+
+1. 更新 `package.json` 版本号并提交
+2. 在仓库 Secrets 配置 `NPM_TOKEN`（拥有 `@paratranz` scope 发布权限的 Automation Token）
+3. 推送标签：`git tag v0.1.0 && git push origin v0.1.0`
+
+工作流会校验标签与包版本一致、运行测试，然后以 `--provenance` 发布到 npm。
+
 ## 说明
 
 - 工具权限与 Token 所属用户一致；写接口按项目角色校验（如文件写操作需管理员）
 - 翻译建议接口开销较高，客户端需串行调用
-- 发布 npm 使用 `npm publish --access public`（包已配置 `publishConfig.access`）
 
 ## License
 

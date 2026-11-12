@@ -95,11 +95,20 @@ Collaboration:
 
 Write operations check project roles: file writes, translation imports, tasks and file labels require manager; string writes require translator or above; term creation requires project membership. Destructive operations and site-internal endpoints (join password, application tests) are not exposed.
 
+## Publishing
+
+Publishing is triggered by a tag (`.github/workflows/publish.yml`):
+
+1. Bump the version in `package.json` and commit
+2. Add an `NPM_TOKEN` repository secret (an Automation token allowed to publish the `@paratranz` scope)
+3. Push a tag: `git tag v0.1.0 && git push origin v0.1.0`
+
+The workflow verifies that the tag matches the package version, runs the tests, then publishes with `--provenance`.
+
 ## Notes
 
 - Tool permissions follow the token user; write endpoints check project roles (for example, file writes require manager)
 - The suggestions endpoint is expensive; requests are serialized by this server
-- Publish with `npm publish --access public` (the package sets `publishConfig.access`)
 
 ## License
 
