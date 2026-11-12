@@ -10,7 +10,8 @@
   },
   "files": [
     "src",
-    "README.md"
+    "README.md",
+    "README.en.md"
   ],
   "scripts": {
     "start": "node src/index.js",

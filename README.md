@@ -1,5 +1,7 @@
 # @paratranz/mcp
 
+[English](./README.en.md) | 简体中文
+
 ParaTranz 的 MCP（Model Context Protocol）服务器，通过 stdio 运行，让支持 MCP 的 AI 客户端直接查询和编辑 ParaTranz 项目。
 
 ## 环境要求
@@ -38,14 +40,14 @@ Cursor / 其他 MCP 客户端同理：以 stdio 方式启动 `paratranz-mcp`，�
 ## 本地开发
 
 ```bash
-# 安装依赖（仓库根目录）
+# 安装依赖
 yarn
 
 # 直接运行（需要 Token）
-PARATRANZ_TOKEN=xxx yarn workspace @paratranz/mcp start
+PARATRANZ_TOKEN=xxx yarn start
 
 # 单元测试
-yarn workspace @paratranz/mcp test
+yarn test
 ```
 
 ## 当前工具
