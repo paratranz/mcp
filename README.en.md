@@ -97,13 +97,21 @@ Write operations check project roles: file writes, translation imports, tasks an
 
 ## Publishing
 
-Publishing is triggered by a tag (`.github/workflows/publish.yml`):
+Publishing uses Trusted Publishing (OIDC) and is triggered by a tag (`.github/workflows/publish.yml`):
 
-1. Bump the version in `package.json` and commit
-2. Add an `NPM_TOKEN` repository secret (an Automation token allowed to publish the `@paratranz` scope)
+1. Configure a Trusted Publisher on npmjs.com for `@paratranz/mcp`: GitHub repository
+   `paratranz/mcp`, workflow `publish.yml`, empty Environment
+2. Bump the version in `package.json` and commit
 3. Push a tag: `git tag v0.1.0 && git push origin v0.1.0`
 
-The workflow verifies that the tag matches the package version, runs the tests, then publishes with `--provenance`.
+The workflow verifies that the tag matches the package version, runs the tests, then
+publishes with `--provenance` via OIDC. No long-lived token is required. You can also
+trigger it manually from Actions → Publish → Run workflow.
+
+> First release: if npm does not allow pre-configuring a Trusted Publisher for an
+> unpublished package, run `npm login` and publish once manually with
+> `npm publish --access public --registry=https://registry.npmjs.org`, then add the
+> Trusted Publisher configuration.
 
 ## Notes
 

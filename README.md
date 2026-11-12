@@ -102,13 +102,19 @@ yarn test
 
 ## 发布
 
-发布由 tag 触发（`.github/workflows/publish.yml`）：
+发布使用 Trusted Publishing（OIDC），由 tag 触发（`.github/workflows/publish.yml`）：
 
-1. 更新 `package.json` 版本号并提交
-2. 在仓库 Secrets 配置 `NPM_TOKEN`（拥有 `@paratranz` scope 发布权限的 Automation Token）
+1. 在 npmjs.com 为 `@paratranz/mcp` 配置 Trusted Publisher：GitHub 仓库 `paratranz/mcp`、
+   workflow `publish.yml`、Environment 留空
+2. 更新 `package.json` 版本号并提交
 3. 推送标签：`git tag v0.1.0 && git push origin v0.1.0`
 
-工作流会校验标签与包版本一致、运行测试，然后以 `--provenance` 发布到 npm。
+工作流会校验标签与包版本一致、运行测试，然后通过 OIDC 以 `--provenance` 发布，
+无需配置长期 token。也可在 Actions → Publish → Run workflow 手动触发。
+
+> 首次发布：若 npm 暂不允许为未发布的包预配置 Trusted Publisher，
+> 先用 `npm login`（带 2FA）手动执行一次 `npm publish --access public --registry=https://registry.npmjs.org`，
+> 再补上 Trusted Publisher 配置。
 
 ## 说明
 
