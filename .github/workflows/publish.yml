@@ -27,6 +27,12 @@ jobs:
         with:
           node-version: 24.x
 
+      - name: Upgrade npm for trusted publishing
+        run: |
+          npm install -g npm@^11.5.1
+          node -v
+          npm -v
+
       - name: Enable Corepack
         run: corepack enable
 
