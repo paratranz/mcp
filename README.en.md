@@ -107,6 +107,7 @@ The workflow verifies that the tag matches the package version, runs the tests, 
 
 ## Notes
 
+- Development happens in the ParaTranz-Mono monorepo under `packages/mcp`; `paratranz/mcp` is a release mirror
 - Tool permissions follow the token user; write endpoints check project roles (for example, file writes require manager)
 - The suggestions endpoint is expensive; requests are serialized by this server
 

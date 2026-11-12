@@ -112,6 +112,7 @@ yarn test
 
 ## 说明
 
+- 源码开发以 ParaTranz-Mono 的 `packages/mcp` 为准；独立仓库 `paratranz/mcp` 为发布镜像
 - 工具权限与 Token 所属用户一致；写接口按项目角色校验（如文件写操作需管理员）
 - 翻译建议接口开销较高，客户端需串行调用
 
