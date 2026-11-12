@@ -102,4 +102,8 @@ yarn workspace @paratranz/mcp test
 
 - 工具权限与 Token 所属用户一致；写接口按项目角色校验（如文件写操作需管理员）
 - 翻译建议接口开销较高，客户端需串行调用
-- 包当前为 `private`，发布 npm 前需移除该标记
+- 发布 npm 使用 `npm publish --access public`（包已配置 `publishConfig.access`）
+
+## License
+
+[MIT](./LICENSE)
