@@ -24,6 +24,10 @@ function createFakeClient() {
     getRedirect: async path => {
       calls.push({path, redirect: true})
       return {status: 302, location: 'https://oss.example.test/archive.zip'}
+    },
+    put: async (path, body) => {
+      calls.push({path, body})
+      return {ok: true}
     }
   }
   return client
@@ -70,6 +74,7 @@ test('registers the full tool set', () => {
     'list_tasks',
     'list_term_history',
     'list_terms',
+    'operate_file',
     'operate_task',
     'reply_issue',
     'trigger_project_export',
@@ -148,4 +153,40 @@ test('write tools validate required fields', async () => {
   assert.match(importTranslation.content[0].text, /filename is required/)
 
   assert.equal(client.calls.length, 0)
+})
+
+test('operate_file maps both operations to PUT /files', async () => {
+  const server = createFakeServer()
+  const client = createFakeClient()
+  registerTools(server, client)
+  const operateFile = server.tools.get('operate_file').handler
+
+  const renamed = await operateFile({
+    projectId: 1,
+    op: 'renameFolder',
+    source: 'old/path/',
+    target: 'new/path/'
+  })
+  assert.equal(renamed.isError, undefined)
+  assert.deepEqual(client.calls[0], {
+    path: '/projects/1/files',
+    body: {op: 'renameFolder', source: 'old/path/', target: 'new/path/'}
+  })
+
+  const merged = await operateFile({projectId: 1, op: 'mergeFiles', source: 2, target: 3, mode: 1})
+  assert.equal(merged.isError, undefined)
+  assert.deepEqual(client.calls[1], {
+    path: '/projects/1/files',
+    body: {op: 'mergeFiles', source: 2, target: 3, mode: 1}
+  })
+
+  const missingMode = await operateFile({projectId: 1, op: 'mergeFiles', source: 2, target: 3})
+  assert.equal(missingMode.isError, true)
+  assert.match(missingMode.content[0].text, /mode is required/)
+
+  const wrongSource = await operateFile({projectId: 1, op: 'renameFolder', source: 2, target: 3})
+  assert.equal(wrongSource.isError, true)
+  assert.match(wrongSource.content[0].text, /directory prefixes/)
+
+  assert.equal(client.calls.length, 2)
 })

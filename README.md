@@ -91,6 +91,7 @@ yarn test
 
 ### 写入
 
+- 文件：`operate_file`（目录重命名 renameFolder / 文件合并 mergeFiles）
 - 词条：`update_string`、`batch_update_strings`（单次最多 1000 条；删除不暴露）
 - 翻译导入：`import_file_translation`（items JSON 模式或本地文件 multipart）
 - 术语：`create_term`、`update_term`、`import_terms`（JSON/CSV，可选 overwrite）

@@ -76,4 +76,39 @@ export function registerFileTools(server, client) {
     const result = await client.getRedirect(`/projects/${projectId}/artifacts/download`)
     return result.location || result
   }))
+
+  server.registerTool('operate_file', {
+    title: 'Operate file',
+    description: 'Rename a folder prefix or merge two files. Requires manager role or above. ' +
+      'renameFolder: source and target are directory prefixes, every file whose name starts ' +
+      'with source is moved under target. mergeFiles: source and target are file IDs of the ' +
+      'same format; mode 0 keeps target strings on key conflicts and renames the source file ' +
+      'to .old, mode 1 replaces target strings with source strings for equal keys.',
+    inputSchema: {
+      projectId,
+      op: z.enum(['renameFolder', 'mergeFiles']).describe('Operation'),
+      source: z.union([z.string().min(1), z.number().int().positive()])
+        .describe('Old directory prefix for renameFolder, or source file ID for mergeFiles'),
+      target: z.union([z.string(), z.number().int().positive()])
+        .describe('New directory prefix for renameFolder, or target file ID for mergeFiles'),
+      mode: z.number().int().min(0).max(1).optional()
+        .describe('Merge mode, required for mergeFiles: 0 keeps target strings on conflicts, ' +
+          '1 replaces target strings with source strings')
+    }
+  }, ({projectId, op, source, target, mode}) => callTool(() => {
+    if (op === 'renameFolder') {
+      if (typeof source !== 'string' || typeof target !== 'string') {
+        throw new Error('source and target must be directory prefixes for renameFolder')
+      }
+      return client.put(`/projects/${projectId}/files`, {op, source, target})
+    }
+
+    if (!Number.isInteger(source) || !Number.isInteger(target)) {
+      throw new Error('source and target must be file IDs for mergeFiles')
+    }
+    if (mode === undefined) {
+      throw new Error('mode is required for mergeFiles')
+    }
+    return client.put(`/projects/${projectId}/files`, {op, source, target, mode})
+  }))
 }
