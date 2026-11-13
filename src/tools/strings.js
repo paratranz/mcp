@@ -155,7 +155,8 @@ export function registerStringTools(server, client) {
 
   server.registerTool('update_string', {
     title: 'Update string',
-    description: 'Update a single string. Requires translator role or above. ' +
+    description: 'Update a single string. Prefer batch_update_strings when updating multiple strings. ' +
+      'Requires translator role or above. ' +
       'Changing key/original/context, hiding or locking a string requires manager. ' +
       'Pass fileId to move the string to another file of the same project.',
     inputSchema: {
@@ -178,7 +179,8 @@ export function registerStringTools(server, client) {
 
   server.registerTool('batch_update_strings', {
     title: 'Batch update strings',
-    description: 'Batch update up to 1000 strings in one request. Requires translator role or above. ' +
+    description: 'Batch update up to 1000 strings in one request; prefer this over update_string ' +
+      'for multiple strings. Requires translator role or above. ' +
       'Changing key/original/context requires manager; marking strings as checked/reviewed or ' +
       'editing checked strings requires reviewer role. Deletion is not exposed.',
     inputSchema: {

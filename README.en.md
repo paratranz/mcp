@@ -87,7 +87,7 @@ Collaboration:
 ### Write
 
 - Files: `operate_file` (folder rename via renameFolder, file merge via mergeFiles)
-- Strings: `update_string`, `batch_update_strings` (up to 1000 per call; deletion is not exposed)
+- Strings: `update_string`, `batch_update_strings` (up to 1000 per call; prefer batch for multiple updates; deletion is not exposed)
 - Translation import: `import_file_translation` (JSON items or multipart file)
 - Terms: `create_term`, `update_term`, `import_terms` (JSON/CSV, optional overwrite)
 - Tasks: `create_task`, `update_task`, `operate_task`, `update_task_strings`, `trigger_task_export`
